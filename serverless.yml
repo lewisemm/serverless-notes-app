@@ -32,6 +32,8 @@ custom:
       - dev
 
 functions:
+  Auth:
+    handler: src/lambda/auth/auth0Authorizer.handler
   GetNotes:
     handler: src/lambda/http/getNotes.handler
     events:
