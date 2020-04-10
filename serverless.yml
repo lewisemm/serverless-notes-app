@@ -58,6 +58,35 @@ functions:
           - logs:PutLogEvents
         Resource: arn:aws:logs:${self:provider.region}:*:log-group:/aws/lambda/serverless-notes-app-dev-GetNotes:*:*
 
+  CreateNotes:
+    handler: src/lambda/http/createNotes.handler
+    events:
+      - http:
+          method: post
+          path: notes
+          cors: true
+          authorizer: Auth
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.NOTES_TABLE}
+      - Effect: Allow
+        Action:
+          - logs:CreateLogStream
+          - logs:CreateLogGroup
+        Resource: arn:aws:logs:${self:provider.region}:*:log-group:/aws/lambda/serverless-notes-app-dev-CreateNotes:*:*
+      - Effect: Allow
+        Action:
+          - logs:PutLogEvents
+        Resource: arn:aws:logs:${self:provider.region}:*:log-group:/aws/lambda/serverless-notes-app-dev-CreateNotes:*:*
+      - Effect: Allow
+        Action:
+          - "xray:PutTraceSegments"
+          - "xray:PutTelemetryRecords"
+        Resource:
+          - "*"
+
 resources:
   Resources:
     GatewayResponseDefault4XX:
@@ -79,12 +108,12 @@ resources:
             AttributeType: S
           - AttributeName: createdAt
             AttributeType: S
-          - AttributeName: notesId
+          - AttributeName: noteId
             AttributeType: S
         KeySchema:
           - AttributeName: userId
             KeyType: HASH
-          - AttributeName: notesId
+          - AttributeName: noteId
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.NOTES_TABLE}

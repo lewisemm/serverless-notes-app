@@ -22,4 +22,13 @@ export class NoteAccess {
 
     return result.Items as NoteItem[]
   }
+
+  async createNote(note: NoteItem): Promise<NoteItem> {
+    await this.docClient.put({
+      TableName: this.notesTable,
+      Item: note
+    }).promise()
+
+    return note
+  }
 }
