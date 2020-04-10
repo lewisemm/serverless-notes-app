@@ -9,10 +9,10 @@ import { getToken } from '../../auth/utils'
 import { createNote } from '../../businessLogic/notes'
 import { CreateNoteRequest } from '../../requests/CreateNoteRequest'
 
-const logger = createLogger('createTodos')
+const logger = createLogger('createNotes')
 
 export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  // TODO: Implement creating a new TODO item
+  // TODO: Implement creating a new Note item
 
   const token = getToken(event.headers.Authorization)
   const createNoteRequest: CreateNoteRequest = JSON.parse(event.body)
