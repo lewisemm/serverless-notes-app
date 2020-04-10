@@ -1,0 +1,6 @@
+# ignore installed dependencies folder
+node_modules
+
+# Ignore config files
+.dynamodb
+.serverless
