@@ -56,3 +56,15 @@ export async function deleteNote(jwtToken: string,
   const userId = parseUserId(jwtToken)
   return await noteAccess.deleteNote(userId, noteId)
 }
+
+export async function getNoteUploadUrl(noteId: string): Promise<string> {
+  return await noteAccess.getNoteUploadUrl(noteId)
+}
+
+export async function updateNoteAttachmentUrl(
+  jwtToken: string,
+  noteId: string
+): Promise<any> {
+  const userId = parseUserId(jwtToken)
+  return await noteAccess.updateNoteAttachmentUrl(userId, noteId)
+}

@@ -7,7 +7,9 @@ export class NoteAccess {
   constructor(
     private readonly docClient: DocumentClient = new AWS.DynamoDB.DocumentClient(),
     private readonly notesTable: string = process.env.NOTES_TABLE,
-    private readonly userIndex: string = process.env.USER_INDEX){
+    private readonly userIndex: string = process.env.USER_INDEX,
+    private readonly bucketName: string = process.env.ATTACHMENTS_S3_BUCKET,
+    private readonly urlExpiration: string = process.env.SIGNED_URL_EXPIRATION){
   }
 
   async getAllNotes(userId: string): Promise<NoteItem[]> {
@@ -76,6 +78,37 @@ export class NoteAccess {
     const deletedResult = await this.docClient.delete(params).promise()
     return deletedResult
   }
+
+  async getNoteUploadUrl(noteId: string): Promise<string> {
+    const s3 = new AWS.S3({
+      signatureVersion: 'v4'
+    })
+    return s3.getSignedUrl('putObject', {
+      Bucket: this.bucketName,
+      Key: noteId,
+      Expires: parseInt(this.urlExpiration)
+    })
+  }
+
+  async updateNoteAttachmentUrl(userId: string, noteId: string): Promise<any> {
+    const attachmentUrl = `https://${this.bucketName}.s3.amazonaws.com/${noteId}`
+    const params = {
+      TableName: this.notesTable,
+      Key: {
+        userId,
+        noteId
+      },
+      UpdateExpression: "set attachmentUrl = :attachmentUrl",
+      ExpressionAttributeValues: {
+        ":attachmentUrl": attachmentUrl
+      },
+      ReturnValues:"NONE"
+    };
+
+    const updatedItem = await this.docClient.update(params).promise()
+    return updatedItem
+  }
+
 
 
 }
