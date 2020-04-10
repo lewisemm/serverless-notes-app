@@ -115,6 +115,37 @@ functions:
         Resource:
           - "*"
 
+  DeleteNote:
+    handler: src/lambda/http/deleteNote.handler
+    events:
+      - http:
+          method: delete
+          path: notes/{noteId}
+          cors: true
+          authorizer: Auth
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:DeleteItem
+          - dynamodb:GetItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.NOTES_TABLE}
+      - Effect: Allow
+        Action:
+          - logs:CreateLogStream
+          - logs:CreateLogGroup
+        Resource: arn:aws:logs:${self:provider.region}:*:log-group:/aws/lambda/serverless-notes-app-dev-DeleteNote:*:*
+      - Effect: Allow
+        Action:
+          - logs:PutLogEvents
+        Resource: arn:aws:logs:${self:provider.region}:*:log-group:/aws/lambda/serverless-notes-app-dev-DeleteNote:*:*
+      - Effect: Allow
+        Action:
+          - "xray:PutTraceSegments"
+          - "xray:PutTelemetryRecords"
+        Resource:
+          - "*"
+
+
 
 resources:
   Resources:

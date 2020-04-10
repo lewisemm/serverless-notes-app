@@ -49,3 +49,10 @@ export async function noteExists(
   const result = await noteAccess.getSingleNote(noteId, userId)
   return !!result
 }
+
+export async function deleteNote(jwtToken: string,
+  noteId: string
+): Promise<any> {
+  const userId = parseUserId(jwtToken)
+  return await noteAccess.deleteNote(userId, noteId)
+}

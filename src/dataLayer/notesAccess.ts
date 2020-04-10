@@ -64,5 +64,18 @@ export class NoteAccess {
     return result.Item
   }
 
+  async deleteNote(userId: string, noteId: string): Promise<any> {
+    const params = {
+      TableName: this.notesTable,
+      Key: {
+        userId,
+        noteId
+      },
+      ReturnValues:"NONE"
+    };
+    const deletedResult = await this.docClient.delete(params).promise()
+    return deletedResult
+  }
+
 
 }
