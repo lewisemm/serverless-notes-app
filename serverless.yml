@@ -51,6 +51,12 @@ functions:
         Action:
           - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.NOTES_TABLE}/index/${self:provider.environment.USER_INDEX}
+      - Effect: Allow
+        Action:
+          - logs:CreateLogStream
+          - logs:CreateLogGroup
+          - logs:PutLogEvents
+        Resource: arn:aws:logs:${self:provider.region}:*:log-group:/aws/lambda/serverless-notes-app-dev-GetNotes:*:*
 
 resources:
   Resources:
