@@ -34,6 +34,7 @@ custom:
 functions:
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
+
   GetNotes:
     handler: src/lambda/http/getNotes.handler
     events:
@@ -86,6 +87,34 @@ functions:
           - "xray:PutTelemetryRecords"
         Resource:
           - "*"
+
+  UpdateNote:
+    handler: src/lambda/http/updateNote.handler
+    events:
+      - http:
+          method: patch
+          path: notes/{noteId}
+          cors: true
+          authorizer: Auth
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:UpdateItem
+          - dynamodb:GetItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.NOTES_TABLE}
+      - Effect: Allow
+        Action:
+          - logs:CreateLogStream
+          - logs:CreateLogGroup
+          - logs:PutLogEvents
+        Resource: arn:aws:logs:${self:provider.region}:*:log-group:/aws/lambda/serverless-notes-app-dev-UpdateNote:*:*
+      - Effect: Allow
+        Action:
+          - "xray:PutTraceSegments"
+          - "xray:PutTelemetryRecords"
+        Resource:
+          - "*"
+
 
 resources:
   Resources:

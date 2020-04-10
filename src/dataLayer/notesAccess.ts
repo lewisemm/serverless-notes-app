@@ -31,4 +31,38 @@ export class NoteAccess {
 
     return note
   }
+
+  async updateNote(userId: string, noteId: string, updatedNote): Promise<any> {
+    const params = {
+      TableName: this.notesTable,
+      Key: {
+        userId,
+        noteId
+      },
+      UpdateExpression: "set title = :title, description = :description",
+      ExpressionAttributeValues: {
+        ":title": updatedNote['title'],
+        ":description": updatedNote['description']
+      },
+      ReturnValues:"NONE"
+    };
+
+    const updatedItem = await this.docClient.update(params).promise()
+    return updatedItem
+
+  }
+
+  async getSingleNote(noteId: string, userId: string) {
+    const result = await this.docClient.get({
+      TableName: this.notesTable,
+      Key: {
+        userId,
+        noteId
+      }
+    }).promise()
+    // return !!result.Item
+    return result.Item
+  }
+
+
 }
