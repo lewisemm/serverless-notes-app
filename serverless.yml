@@ -33,6 +33,17 @@ custom:
     stages: # Add this section of the config
       - dev
 
+  documentation:
+    api:
+      info:
+        version: v1.0.0
+        title: Serverless Notes Application
+        description: Serverless Notes Application
+    models:
+      - name: CreateNotesRequest
+        contentType: application/json
+        schema: ${file(models/create-notes-request.json)}
+
 functions:
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
@@ -69,6 +80,12 @@ functions:
           path: notes
           cors: true
           authorizer: Auth
+          reqValidatorName: RequestBodyValidator
+          documentation:
+            summary: Create note items
+            description: Create note items
+            requestModels:
+              'application/json': CreateNotesRequest
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -255,3 +272,12 @@ resources:
                 - s3:PutObject
               Resource: 'arn:aws:s3:::${self:provider.environment.ATTACHMENTS_S3_BUCKET}/*'
         Bucket: !Ref AttachmentsBucket
+
+    RequestBodyValidator:
+      Type: AWS::ApiGateway::RequestValidator
+      Properties:
+        Name: 'request-body-validator'
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        ValidateRequestBody: true
+        ValidateRequestParameters: false
