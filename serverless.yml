@@ -71,6 +71,12 @@ functions:
           - logs:CreateLogGroup
           - logs:PutLogEvents
         Resource: arn:aws:logs:${self:provider.region}:*:log-group:/aws/lambda/serverless-notes-app-dev-GetNotes:*:*
+      - Effect: Allow
+        Action:
+          - "xray:PutTraceSegments"
+          - "xray:PutTelemetryRecords"
+        Resource:
+          - "*"
 
   CreateNotes:
     handler: src/lambda/http/createNotes.handler
@@ -194,9 +200,6 @@ functions:
           - "xray:PutTelemetryRecords"
         Resource:
           - "*"
-
-
-
 
 resources:
   Resources:
