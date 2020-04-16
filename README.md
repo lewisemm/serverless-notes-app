@@ -19,38 +19,38 @@ Below is a comprehensive list of services in use;
 # Installation and local setup
 1. Navigate to your projects directory on terminal.
 2. Clone this repository.
-  ```sh
-  git clone git@github.com:lewisemm/serverless-notes-app.git
-  ```
+    ```sh
+    git clone git@github.com:lewisemm/serverless-notes-app.git
+    ```
 
 3. Navigate to the downloaded repository.
 
-  ```sh
-  ce serverless-notes-app/
-  ```
+    ```sh
+    cd serverless-notes-app/
+    ```
 
 4. Install `serverless` package globally.
 
-  ```sh
-  npm install -g serverless
-  ```
+    ```sh
+    npm install -g serverless
+    ```
 
 5. Install the application's dependencies
 
-  ```sh
-  npm install package.json
-  ```
+    ```sh
+    npm install package.json
+    ```
 
 6. Start the DynamoDb service in the background on your local machine
 
-  ```sh
-  sls dynamodb start &
-  ```
+    ```sh
+    sls dynamodb start &
+    ```
 
 7. Start the application locally
 
-  ```sh
-  sls offline
-  ```
+    ```sh
+    sls offline
+    ```
 
 # Deploying to AWS
