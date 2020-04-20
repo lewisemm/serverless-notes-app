@@ -54,3 +54,18 @@ Below is a comprehensive list of services in use;
     ```
 
 # Deploying to AWS
+1. Login to AWS
+2. Navigate to the [Identity and Access Management (IAM)](https://aws.amazon.com/iam/) service
+3. Add an IAM user [using the console option](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_create.html#id_users_create_console).
+  i. select the programmatic access option. You will get an access key and secret id. Use these to configure serverless framework
+  ii. for permissions, add administrator access. 
+  > This is obviously a security risk, but it will do for such a hobby application. APPS ON PRODUCTION WILL REQUIRE THE USE OF LEAST PRIVILEGE PERMISSIONS.
+4. Run the following command to configure serverless credentials.
+  ```sh
+  aws configure
+  ```
+5. Provide the access key and secret id from step (3) above. Leave the rest of the options as default unless otherwise desired.
+6. Run the following command to deploy.
+  ```sh
+  sls deploy -v
+  ```
